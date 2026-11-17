@@ -235,7 +235,11 @@ namespace Doubly_Linked_List
         // Auxiliary space: O(1). Output space: one new node.
         public static BinNode<int> AddFirst(BinNode<int> first, int x)//QC1
         {//assuming first on very left
-            BinNode<int> to_add = new BinNode<int>(null,x,first);
+            BinNode<int> to_add = new BinNode<int>(null, x, first);
+
+            if (first != null)
+                first.SetLeft(to_add);
+
             return to_add;
         }
 
@@ -312,29 +316,32 @@ namespace Doubly_Linked_List
         // Auxiliary space: O(1). Output space: one new node.
         public static BinNode<int> InsertSorted(BinNode<int> first, int x)//QC6
         {//assuming first is very left
-            BinNode<int> p = first;
             BinNode<int> toAdd = new BinNode<int>(x);
+
             if (first == null)
                 return toAdd;
-            if (p.GetValue() >= toAdd.GetValue())
+
+            if (first.GetValue() >= x)
             {
-                p.SetLeft(toAdd);
-                toAdd.SetRight(p);
+                first.SetLeft(toAdd);
+                toAdd.SetRight(first);
                 return toAdd;
             }
-            while (p != null)
+
+            BinNode<int> p = first;
+            while (p.GetRight() != null && p.GetRight().GetValue() < x)
             {
-                if (p.GetValue() >= toAdd.GetValue())
-                {
-                    toAdd.SetLeft(p.GetLeft());
-                    p.GetLeft().SetRight(toAdd);
-                    p.SetLeft(toAdd);
-                    toAdd.SetRight(p);
-                    return first;
-                }
+                p = p.GetRight();
             }
-            p.SetRight(toAdd);
+
+            BinNode<int> next = p.GetRight();
             toAdd.SetLeft(p);
+            toAdd.SetRight(next);
+            p.SetRight(toAdd);
+
+            if (next != null)
+                next.SetLeft(toAdd);
+
             return first;
         }
 
