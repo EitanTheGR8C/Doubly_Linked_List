@@ -58,18 +58,31 @@ namespace Doubly_Linked_List
 
         public static void PrintForward(BinNode<int> first)//QB2
         {
-            // TODO
+            if(first == null)
+                Console.WriteLine();
+            string str = "";
+            while (first != null)
+            {
+                str += first.GetValue() + " ";
+                first = first.GetRight();
+            }
+            Console.WriteLine(str);
         }
 
         public static BinNode<int> GetLast(BinNode<int> first)//QB3
         {
-            // TODO
-            return null;
+            if( first == null)
+                return null;
+            while (first.GetRight() != null)
+            {
+                first = first.GetRight();
+            }
+            return first;
         }
 
         public static void PrintBackward(BinNode<int> last)//QB4
         {
-            // TODO
+            
         }
 
         public static int Length(BinNode<int> first)//QB5
