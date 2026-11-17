@@ -160,7 +160,6 @@ namespace Doubly_Linked_List
             return null;
         }
 
-
         //QB7: From any node, we can follow the left links to reach the first node,
         //then print the whole list.In a singly linked list, we cannot move backward,
         //so a middle node does not give us access to the nodes before it.
@@ -427,7 +426,7 @@ namespace Doubly_Linked_List
 
         // Time complexity: O(n), n = array length.
         // Auxiliary space: O(1). Output space: O(n) for the new nodes.
-        public static BinNode<int> BuildCircular(int[] arr)
+        public static BinNode<int> BuildCircular(int[] arr)//QE1
         {
             // TODO
             return null;
@@ -435,14 +434,14 @@ namespace Doubly_Linked_List
 
         // Time complexity: O(n), using direct printing for one full circle.
         // Auxiliary space: O(1).
-        public static void PrintCircular(BinNode<int> p)
+        public static void PrintCircular(BinNode<int> p)//QE2
         {
             // TODO
         }
 
         // Time complexity: O(1), using first.GetLeft() to reach the last node.
         // Auxiliary space: O(1). Output space: one new node.
-        public static BinNode<int> AddLastCircular(BinNode<int> first, int x)
+        public static BinNode<int> AddLastCircular(BinNode<int> first, int x)//QE3
         {
             // TODO
             return null;
@@ -450,7 +449,7 @@ namespace Doubly_Linked_List
 
         // Time complexity: O(1), since p is given.
         // Auxiliary space: O(1).
-        public static BinNode<int> RemoveCircular(BinNode<int> first, BinNode<int> p)
+        public static BinNode<int> RemoveCircular(BinNode<int> first, BinNode<int> p)//QE4
         {
             // TODO
             return null;
@@ -466,7 +465,7 @@ namespace Doubly_Linked_List
 
         // Time complexity: O(n), finding the last node and comparing from both ends.
         // Auxiliary space: O(1).
-        public static bool IsPalindrome(BinNode<int> first)
+        public static bool IsPalindrome(BinNode<int> first)//QF1
         {
             // TODO
             return false;
@@ -474,7 +473,7 @@ namespace Doubly_Linked_List
 
         // Time complexity: O(n), moving references inward from both ends.
         // Auxiliary space: O(1).
-        public static BinNode<int> GetMiddle(BinNode<int> first)
+        public static BinNode<int> GetMiddle(BinNode<int> first)//QF2
         {
             // TODO
             return null;
@@ -483,7 +482,7 @@ namespace Doubly_Linked_List
         // Time complexity: O(n), adding each input number at the start.
         // n = number of inputs before 999.
         // Auxiliary space: O(1). Output space: O(n) for the new nodes.
-        public static BinNode<int> ReadReversed()
+        public static BinNode<int> ReadReversed()//QF3
         {
             // TODO
             return null;
@@ -491,7 +490,7 @@ namespace Doubly_Linked_List
 
         // Time complexity: O(n + m), n and m = lengths of the two lists.
         // Auxiliary space: O(1), reusing the existing nodes.
-        public static BinNode<int> InsertToCenter(BinNode<int> list1, BinNode<int> list2)
+        public static BinNode<int> InsertToCenter(BinNode<int> list1, BinNode<int> list2)//QF4
         {
             // TODO
             return null;
@@ -500,7 +499,7 @@ namespace Doubly_Linked_List
         // Time complexity: O(n + m), n and m = digit counts of the two numbers.
         // Auxiliary space: O(1).
         // Output space: O(max(n, m)) for the result's new nodes.
-        public static BinNode<int> AddBig(BinNode<int> list1, BinNode<int> list2)
+        public static BinNode<int> AddBig(BinNode<int> list1, BinNode<int> list2)//QF5
         {
             // TODO
             return null;
