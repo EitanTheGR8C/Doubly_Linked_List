@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Doubly_Linked_List
 {
@@ -27,8 +30,9 @@ namespace Doubly_Linked_List
     // and any returned output. A fixed number of variables uses O(1) space.
     // State output space separately when creating a new list.
     // Example: BuildList uses O(1) auxiliary space and O(n) output space.
-    internal class BinNodeUtils
+    public static class BinNodeUtils
     {
+        #region Part B
         // === Part B ===
         // Part B: basic operations.
         // Build a list from an array, print in either direction, count nodes,
@@ -75,7 +79,7 @@ namespace Doubly_Linked_List
             Console.WriteLine(str);
         }
 
-        // Time complexity: O(n).
+        // Time complexity: O(n). Since only the first node is given, we must follow the right links to reach the last node.
         // Auxiliary space: O(1).
         public static BinNode<int> GetLast(BinNode<int> first)//QB3
         {//assuming first on left
@@ -156,6 +160,11 @@ namespace Doubly_Linked_List
             return null;
         }
 
+
+        //QB7: From any node, we can follow the left links to reach the first node,
+        //then print the whole list.In a singly linked list, we cannot move backward,
+        //so a middle node does not give us access to the nodes before it.
+
         // Time complexity: O(n) worst case, walking left from the last node.
         // Auxiliary space: O(1).
         public static BinNode<int> GetFirst(BinNode<int> p)//QB7
@@ -213,8 +222,8 @@ namespace Doubly_Linked_List
             }
             return true;
         }
-
-
+        #endregion Part B
+        #region Part C
         // === Part C ===
         // Part C: adding nodes.
         // Insert at the start, end, before or after a node, or into a sorted list.
@@ -222,47 +231,131 @@ namespace Doubly_Linked_List
         // Methods that may replace the first node return the updated first node.
         // Handle empty lists and insertions at either end where required.
 
-        public static BinNode<int> AddFirst(BinNode<int> first, int x)
-        {
-            // TODO
-            return null;
+        // Time complexity: O(1).
+        // Auxiliary space: O(1). Output space: one new node.
+        public static BinNode<int> AddFirst(BinNode<int> first, int x)//QC1
+        {//assuming first on very left
+            BinNode<int> to_add = new BinNode<int>(null,x,first);
+            return to_add;
         }
 
-        public static BinNode<int> AddLast(BinNode<int> first, int x)
-        {
-            // TODO
-            return null;
+        // Time complexity: O(n), to reach the last node.
+        // Auxiliary space: O(1). Output space: one new node.
+        //To make it O(1), store a reference to the last node as well as the first.
+        //Keep that reference updated whenever the last node changes.
+        //Adding at the end then requires only linking the new node and updating last,
+        //without traversing the list.
+        public static BinNode<int> AddLast(BinNode<int> first, int x)//QC2
+        {//assuming first on very left
+            BinNode<int> toAdd = new BinNode<int>(x);
+            if (first == null)
+            {
+                return toAdd;
+            }
+            BinNode<int> last = first;
+            while (last.GetRight() != null)
+            {
+                last = last.GetRight();
+            }
+            last.SetRight(toAdd);
+            toAdd.SetLeft(last);
+            return first;
         }
 
-        public static void AddAfter(BinNode<int> p, int x)
+        // Time complexity: O(1), since p is given.
+        // Auxiliary space: O(1). Output space: one new node.
+        public static void AddAfter(BinNode<int> p, int x)//QC3
         {
-            // TODO
+            if (p == null)
+                return;
+
+            BinNode<int> newNode = new BinNode<int>(x);
+            BinNode<int> next = p.GetRight();
+
+            newNode.SetLeft(p);
+            newNode.SetRight(next);
+            p.SetRight(newNode);
+
+            if (next != null)
+                next.SetLeft(newNode);
         }
 
-        public static void AddBefore(BinNode<int> p, int x)
+        // Time complexity: O(1), since p and its left link are given.
+        // Auxiliary space: O(1). Output space: one new node.
+        public static void AddBefore(BinNode<int> p, int x)//QC4
         {
-            // TODO
+            if (p == null || p.GetLeft() == null)
+                return;
+
+            BinNode<int> prev = p.GetLeft();
+            BinNode<int> newNode = new BinNode<int>(prev, x, p);
+
+            prev.SetRight(newNode);
+            p.SetLeft(newNode);
         }
 
-        public static BinNode<int> AddBeforeAny(BinNode<int> first, BinNode<int> p, int x)
+        // Time complexity: O(1), using AddFirst or AddBefore.
+        // Auxiliary space: O(1). Output space: one new node.
+        public static BinNode<int> AddBeforeAny(BinNode<int> first, BinNode<int> p, int x)//QC5
         {
-            // TODO
-            return null;
+            if (p == null)
+                return first;
+
+            if (p == first)
+                return AddFirst(first, x);
+
+            AddBefore(p, x);
+            return first;
         }
 
-        public static BinNode<int> InsertSorted(BinNode<int> first, int x)
-        {
-            // TODO
-            return null;
+        // Time complexity: O(n), to find the insertion position.
+        // Auxiliary space: O(1). Output space: one new node.
+        public static BinNode<int> InsertSorted(BinNode<int> first, int x)//QC6
+        {//assuming first is very left
+            BinNode<int> p = first;
+            BinNode<int> toAdd = new BinNode<int>(x);
+            if (first == null)
+                return toAdd;
+            if (p.GetValue() >= toAdd.GetValue())
+            {
+                p.SetLeft(toAdd);
+                toAdd.SetRight(p);
+                return toAdd;
+            }
+            while (p != null)
+            {
+                if (p.GetValue() >= toAdd.GetValue())
+                {
+                    toAdd.SetLeft(p.GetLeft());
+                    p.GetLeft().SetRight(toAdd);
+                    p.SetLeft(toAdd);
+                    toAdd.SetRight(p);
+                    return first;
+                }
+            }
+            p.SetRight(toAdd);
+            toAdd.SetLeft(p);
+            return first;
         }
 
-        public static BinNode<int> BuildSorted(int[] arr)
+        // Time complexity: O(n^2), using repeated InsertSorted calls.
+        // Auxiliary space: O(1). Output space: O(n) for the new nodes.
+        public static BinNode<int> BuildSorted(int[] arr)//QC7
         {
-            // TODO
-            return null;
+            BinNode<int> first = null;
+
+            if (arr == null)
+                return first;
+
+            for (int i = 0; i < arr.Length; i++)
+            {
+                first = InsertSorted(first, arr[i]);
+            }
+
+            return first;
         }
-
-
+        #endregion Part C
+        #region Part D
         // === Part D ===
         // Part D: removing nodes.
         // Remove a given node, the first occurrence of a value, or all occurrences.
@@ -270,25 +363,31 @@ namespace Doubly_Linked_List
         // Handle removal of the first, last or only node.
         // Return the updated first node, which may be null.
 
+        // Time complexity: O(1), since p is given.
+        // Auxiliary space: O(1).
         public static BinNode<int> RemoveNode(BinNode<int> first, BinNode<int> p)
         {
             // TODO
             return null;
         }
 
+        // Time complexity: O(n), to find the value.
+        // Auxiliary space: O(1).
         public static BinNode<int> RemoveValue(BinNode<int> first, int x)
         {
             // TODO
             return null;
         }
 
+        // Time complexity: O(n), using one traversal.
+        // Auxiliary space: O(1).
         public static BinNode<int> RemoveAll(BinNode<int> first, int x)
         {
             // TODO
             return null;
         }
-
-
+        #endregion Part D
+        #region Part E
         // === Part E ===
         // Part E: circular doubly linked lists.
         // The last node's right link points to the first node.
@@ -297,29 +396,38 @@ namespace Doubly_Linked_List
         // Traverse one full circle, stopping when the starting node is reached again.
         // Handle empty lists and single-node lists separately where needed.
 
+        // Time complexity: O(n), n = array length.
+        // Auxiliary space: O(1). Output space: O(n) for the new nodes.
         public static BinNode<int> BuildCircular(int[] arr)
         {
             // TODO
             return null;
         }
 
+        // Time complexity: O(n), using direct printing for one full circle.
+        // Auxiliary space: O(1).
         public static void PrintCircular(BinNode<int> p)
         {
             // TODO
         }
 
+        // Time complexity: O(1), using first.GetLeft() to reach the last node.
+        // Auxiliary space: O(1). Output space: one new node.
         public static BinNode<int> AddLastCircular(BinNode<int> first, int x)
         {
             // TODO
             return null;
         }
 
+        // Time complexity: O(1), since p is given.
+        // Auxiliary space: O(1).
         public static BinNode<int> RemoveCircular(BinNode<int> first, BinNode<int> p)
         {
             // TODO
             return null;
         }
-
+        #endregion Part E
+        #region Part F
         // === Part F ===
         // Part F: advanced questions.
         // Check for a palindrome, find the middle node, build a reversed input list,
@@ -327,34 +435,47 @@ namespace Doubly_Linked_List
         // Use the previous methods where helpful.
         // Follow each question's restrictions on arrays, extra lists and traversal.
 
+        // Time complexity: O(n), finding the last node and comparing from both ends.
+        // Auxiliary space: O(1).
         public static bool IsPalindrome(BinNode<int> first)
         {
             // TODO
             return false;
         }
 
+        // Time complexity: O(n), moving references inward from both ends.
+        // Auxiliary space: O(1).
         public static BinNode<int> GetMiddle(BinNode<int> first)
         {
             // TODO
             return null;
         }
 
+        // Time complexity: O(n), adding each input number at the start.
+        // n = number of inputs before 999.
+        // Auxiliary space: O(1). Output space: O(n) for the new nodes.
         public static BinNode<int> ReadReversed()
         {
             // TODO
             return null;
         }
 
+        // Time complexity: O(n + m), n and m = lengths of the two lists.
+        // Auxiliary space: O(1), reusing the existing nodes.
         public static BinNode<int> InsertToCenter(BinNode<int> list1, BinNode<int> list2)
         {
             // TODO
             return null;
         }
 
+        // Time complexity: O(n + m), n and m = digit counts of the two numbers.
+        // Auxiliary space: O(1).
+        // Output space: O(max(n, m)) for the result's new nodes.
         public static BinNode<int> AddBig(BinNode<int> list1, BinNode<int> list2)
         {
             // TODO
             return null;
         }
+        #endregion PartF
     }
 }
