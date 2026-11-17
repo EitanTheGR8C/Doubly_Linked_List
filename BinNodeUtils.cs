@@ -36,7 +36,8 @@ namespace Doubly_Linked_List
         // Also check that the links are consistent and the values are sorted.
 
 
-        // Time complexity: O(n), where n is the array length.
+        // Time complexity: O(n).
+        // Auxiliary space: O(1). Output space: O(n) for the new nodes.
         public static BinNode<int> BuildList(int[] arr)//QB1
         {
             if (arr == null || arr.Length == 0)
@@ -56,10 +57,15 @@ namespace Doubly_Linked_List
             return first;
         }
 
+        // Time complexity: O(n^2), due to repeated string copying.
+        // Auxiliary space: O(n) for the accumulated string.
         public static void PrintForward(BinNode<int> first)//QB2
-        {
-            if(first == null)
+        {//assuming first on left
+            if (first == null)
+            {
                 Console.WriteLine();
+                return;
+            }
             string str = "";
             while (first != null)
             {
@@ -69,9 +75,11 @@ namespace Doubly_Linked_List
             Console.WriteLine(str);
         }
 
+        // Time complexity: O(n).
+        // Auxiliary space: O(1).
         public static BinNode<int> GetLast(BinNode<int> first)//QB3
-        {
-            if( first == null)
+        {//assuming first on left
+            if ( first == null)
                 return null;
             while (first.GetRight() != null)
             {
@@ -80,52 +88,89 @@ namespace Doubly_Linked_List
             return first;
         }
 
+        // Time complexity: O(n).
+        // Auxiliary space: O(1).
         public static void PrintBackward(BinNode<int> last)//QB4
-        {
-            
+        {//assuming last on right
+            while (last != null)
+            {
+                Console.Write(last.GetValue() + " ");
+                last = last.GetLeft();
+            }
+            Console.WriteLine();
         }
 
+        // Time complexity: O(n).
+        // Auxiliary space: O(1).
         public static int Length(BinNode<int> first)//QB5
-        {
-            // TODO
-            return 0;
+        {//assuming first on left
+            if (first == null)
+                return 0;
+            int cnt = 0;
+            while (first != null)
+            {
+                cnt++;
+                first = first.GetRight();
+            }
+            return cnt;
         }
 
+        // Time complexity: O(n).
+        // Auxiliary space: O(1).
         public static int Sum(BinNode<int> first)//QB5
         {
-            // TODO
-            return 0;
+            if (first == null)
+                return 0;
+            int sum = 0;
+            while (first != null)
+            {
+                sum += first.GetValue();
+                first = first.GetLeft();
+            }    
+            return sum;
         }
 
+        // Time complexity: O(n) worst case; O(1) if x is found immediately.
+        // Auxiliary space: O(1).
         public static bool IsExist(BinNode<int> first, int x)//QB6
         {
             // TODO
             return false;
         }
 
+        // Time complexity: O(n) worst case; O(1) if x is found immediately.
+        // Auxiliary space: O(1).
         public static BinNode<int> Find(BinNode<int> first, int x)//QB6
         {
             // TODO
             return null;
         }
 
+        // Time complexity: O(n) worst case, walking left from the last node.
+        // Auxiliary space: O(1).
         public static BinNode<int> GetFirst(BinNode<int> p)//QB7
         {
             // TODO
             return null;
         }
 
+        // Time complexity: O(n), finding the start and then printing the list.
+        // Auxiliary space: O(1).
         public static void PrintAll(BinNode<int> p)//QB7
         {
             // TODO
         }
 
+        // Time complexity: O(n) worst case.
+        // Auxiliary space: O(1).
         public static bool IsConsistent(BinNode<int> first)//QB8
         {
             // TODO
             return false;
         }
 
+        // Time complexity: O(n) worst case.
+        // Auxiliary space: O(1).
         public static bool IsSorted(BinNode<int> first)//QB9
         {
             // TODO
