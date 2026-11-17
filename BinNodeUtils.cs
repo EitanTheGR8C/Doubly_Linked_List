@@ -372,26 +372,48 @@ namespace Doubly_Linked_List
 
         // Time complexity: O(1), since p is given.
         // Auxiliary space: O(1).
-        public static BinNode<int> RemoveNode(BinNode<int> first, BinNode<int> p)
-        {
-            // TODO
-            return null;
+        public static BinNode<int> RemoveNode(BinNode<int> first, BinNode<int> p)//QD1
+        {//assuming first on very left
+            if (first == null || p == null)
+                return first;
+
+            BinNode<int> prev = p.GetLeft();
+            BinNode<int> next = p.GetRight();
+
+            if (prev != null)
+                prev.SetRight(next);
+
+            if (next != null)
+                next.SetLeft(prev);
+
+            if (p == first)
+                return next;
+
+            return first;
         }
 
         // Time complexity: O(n), to find the value.
         // Auxiliary space: O(1).
-        public static BinNode<int> RemoveValue(BinNode<int> first, int x)
-        {
-            // TODO
-            return null;
+        public static BinNode<int> RemoveValue(BinNode<int> first, int x)//QD2
+        {//assuming first on very left
+            BinNode<int> p = Find(first, x);
+            first = RemoveNode(first, p);
+            return first;
         }
 
         // Time complexity: O(n), using one traversal.
         // Auxiliary space: O(1).
-        public static BinNode<int> RemoveAll(BinNode<int> first, int x)
-        {
-            // TODO
-            return null;
+        public static BinNode<int> RemoveAll(BinNode<int> first, int x)//QD3
+        {//assuming first on very left
+            BinNode<int> current = first;
+            while (current != null)
+            {
+                BinNode<int> next = current.GetRight();
+                if (current.GetValue() == x)
+                    first = RemoveNode(first, current);
+                current = next;
+            }
+            return first;
         }
         #endregion Part D
         #region Part E

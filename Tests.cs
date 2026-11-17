@@ -18,7 +18,7 @@
 #define PART_A
 #define PART_B
 #define PART_C
-//#define PART_D
+#define PART_D
 //#define PART_E
 //#define PART_F
 
