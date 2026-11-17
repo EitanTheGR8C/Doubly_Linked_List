@@ -10,7 +10,7 @@ namespace Doubly_Linked_List
     {
         static void Main(string[] args)
         {
-
+            Tests.RunAll();
 
         }
     }
