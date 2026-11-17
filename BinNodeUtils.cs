@@ -118,14 +118,14 @@ namespace Doubly_Linked_List
         // Time complexity: O(n).
         // Auxiliary space: O(1).
         public static int Sum(BinNode<int> first)//QB5
-        {
+        {//assuming first on left
             if (first == null)
                 return 0;
             int sum = 0;
             while (first != null)
             {
                 sum += first.GetValue();
-                first = first.GetLeft();
+                first = first.GetRight();
             }    
             return sum;
         }
@@ -133,16 +133,26 @@ namespace Doubly_Linked_List
         // Time complexity: O(n) worst case; O(1) if x is found immediately.
         // Auxiliary space: O(1).
         public static bool IsExist(BinNode<int> first, int x)//QB6
-        {
-            // TODO
+        {//assuming first on left
+            while (first != null)
+            {
+                if(x == first.GetValue()) 
+                    return true;
+                first = first.GetRight();
+            }
             return false;
         }
 
         // Time complexity: O(n) worst case; O(1) if x is found immediately.
         // Auxiliary space: O(1).
         public static BinNode<int> Find(BinNode<int> first, int x)//QB6
-        {
-            // TODO
+        {//assuming first on left
+            while (first != null)
+            {
+                if(first.GetValue() == x)
+                    return first;
+                first = first.GetRight();
+            }
             return null;
         }
 
@@ -150,31 +160,58 @@ namespace Doubly_Linked_List
         // Auxiliary space: O(1).
         public static BinNode<int> GetFirst(BinNode<int> p)//QB7
         {
-            // TODO
-            return null;
+            if(p == null)
+                return null;
+            while (p.GetLeft() != null)
+            {
+                p = p.GetLeft();
+            }
+            return p;
         }
 
         // Time complexity: O(n), finding the start and then printing the list.
         // Auxiliary space: O(1).
         public static void PrintAll(BinNode<int> p)//QB7
         {
-            // TODO
+            p = GetFirst(p);
+            PrintForward(p);
         }
 
         // Time complexity: O(n) worst case.
         // Auxiliary space: O(1).
         public static bool IsConsistent(BinNode<int> first)//QB8
         {
-            // TODO
-            return false;
+            if (first == null)
+                return true;
+
+            if (first.GetLeft() != null)
+                return false;
+
+            while (first.GetRight() != null)
+            {
+                if (first.GetRight().GetLeft() != first)
+                    return false;
+
+                first = first.GetRight();
+            }
+            return true;
         }
 
         // Time complexity: O(n) worst case.
         // Auxiliary space: O(1).
         public static bool IsSorted(BinNode<int> first)//QB9
         {
-            // TODO
-            return false;
+            if (first == null)
+                return true;
+
+            while (first.GetRight() != null)
+            {
+                if (first.GetValue() > first.GetRight().GetValue())
+                    return false;
+
+                first = first.GetRight();
+            }
+            return true;
         }
 
 
