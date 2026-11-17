@@ -6,7 +6,16 @@ using System.Threading.Tasks;
 
 namespace Doubly_Linked_List
 {
-    internal class BinNode<T>
+    // Represents one node in a doubly linked list.
+    // T is the type of value stored in the node, such as int or string.
+    // Each node stores a value and two references:
+    // left points to the previous node, and right points to the next node.
+    // In a non-circular list, the first node's left reference is null,
+    // and the last node's right reference is null.
+    // Example: null <- [4] <-> [8] <-> [15] -> null
+    // Constructors and setters only update this node.
+    // The code using the class must connect neighbouring nodes in both directions.
+    public class BinNode<T>
     {
         private T value;
         private BinNode<T> left;
