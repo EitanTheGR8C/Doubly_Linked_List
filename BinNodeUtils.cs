@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Doubly_Linked_List
 {
@@ -428,31 +430,77 @@ namespace Doubly_Linked_List
         // Auxiliary space: O(1). Output space: O(n) for the new nodes.
         public static BinNode<int> BuildCircular(int[] arr)//QE1
         {
-            // TODO
-            return null;
+            if(arr == null || arr.Length == 0) 
+                return null;
+            
+            BinNode<int> first = BuildList(arr);
+            BinNode<int> last  = GetLast(first);
+
+            last.SetRight(first);
+            first.SetLeft(last);
+            return first;
         }
 
+        //If q starts at p, the condition q != p is false before the first iteration,
+        //so a regular while loop never runs and nothing is printed.
+        //A do-while loop fits because it prints the current node and moves to the next node before checking whether q has returned to p.
+        //This also works for a list containing only one node.
+        //
         // Time complexity: O(n), using direct printing for one full circle.
         // Auxiliary space: O(1).
         public static void PrintCircular(BinNode<int> p)//QE2
         {
-            // TODO
+            if (p == null)
+            {
+                Console.WriteLine();
+                return;
+            }
+            BinNode<int> q = p;
+            do
+            {
+                Console.Write(q + " ");
+                q = q.GetRight();
+            } while (p != q);
+            Console.WriteLine();
+
         }
 
         // Time complexity: O(1), using first.GetLeft() to reach the last node.
         // Auxiliary space: O(1). Output space: one new node.
         public static BinNode<int> AddLastCircular(BinNode<int> first, int x)//QE3
-        {
-            // TODO
-            return null;
+        {//assuming circular
+            BinNode<int> toAdd = new BinNode<int>(x);
+            if (first == null)
+            {
+                toAdd.SetRight(toAdd);
+                toAdd.SetLeft(toAdd);
+                return toAdd;
+            }
+ 
+            toAdd.SetLeft(first.GetLeft());
+            first.GetLeft().SetRight(toAdd);
+            first.SetLeft(toAdd);
+            toAdd.SetRight(first);
+            return first;
         }
 
         // Time complexity: O(1), since p is given.
         // Auxiliary space: O(1).
         public static BinNode<int> RemoveCircular(BinNode<int> first, BinNode<int> p)//QE4
         {
-            // TODO
-            return null;
+            if (first == null || p == null)
+                return first;
+
+            if (p.GetRight() == p)
+                return null;
+
+            p.GetLeft().SetRight(p.GetRight());
+            p.GetRight().SetLeft(p.GetLeft());
+
+            if (p == first)
+                return p.GetRight();
+
+            return first;
         }
         #endregion Part E
         #region Part F
