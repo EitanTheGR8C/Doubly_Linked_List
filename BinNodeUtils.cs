@@ -514,17 +514,40 @@ namespace Doubly_Linked_List
         // Time complexity: O(n), finding the last node and comparing from both ends.
         // Auxiliary space: O(1).
         public static bool IsPalindrome(BinNode<int> first)//QF1
-        {
-            // TODO
-            return false;
+        {//asumming not circle
+
+            if (first == null)
+                return true;
+
+            BinNode<int> left = first;
+            BinNode<int> right = GetLast(first);
+
+            while (left != right && left.GetLeft() != right)
+            {
+                if (left.GetValue() != right.GetValue())
+                    return false;
+                left = left.GetRight();
+                right = right.GetLeft();
+            }
+
+            return true;
         }
 
         // Time complexity: O(n), moving references inward from both ends.
         // Auxiliary space: O(1).
         public static BinNode<int> GetMiddle(BinNode<int> first)//QF2
-        {
-            // TODO
-            return null;
+        {//assuming not circle & assuming odd amount of nodes.
+            if(first == null)
+                return null;
+            
+            BinNode<int> left = first;
+            BinNode<int> right = GetLast(first);
+            while (left != right)
+            {
+                left = left.GetRight();
+                right = right.GetLeft();
+            }
+            return right;
         }
 
         // Time complexity: O(n), adding each input number at the start.
@@ -532,16 +555,41 @@ namespace Doubly_Linked_List
         // Auxiliary space: O(1). Output space: O(n) for the new nodes.
         public static BinNode<int> ReadReversed()//QF3
         {
-            // TODO
-            return null;
+            BinNode<int> first = null;
+            int x = int.Parse(Console.ReadLine());
+
+            while (x != 999)
+            {
+                first = AddFirst(first, x);
+                x = int.Parse(Console.ReadLine());
+            }
+
+            return first;
         }
 
         // Time complexity: O(n + m), n and m = lengths of the two lists.
         // Auxiliary space: O(1), reusing the existing nodes.
         public static BinNode<int> InsertToCenter(BinNode<int> list1, BinNode<int> list2)//QF4
-        {
-            // TODO
-            return null;
+        {//assuming neither are empty. assuming list1 even. assuming both are first.
+            if (list1 == null)
+                return list2;
+            if (list2 == null)
+                return list1;
+
+            int len = Length(list1);
+            BinNode<int> mid = list1;
+            for (int i = 1; i < len / 2; i++)
+                mid = mid.GetRight();
+
+            BinNode<int> secondHalf = mid.GetRight();
+            BinNode<int> last2 = GetLast(list2);
+
+            mid.SetRight(list2);
+            list2.SetLeft(mid);
+            last2.SetRight(secondHalf);
+            secondHalf.SetLeft(last2);
+
+            return list1;
         }
 
         // Time complexity: O(n + m), n and m = digit counts of the two numbers.
@@ -549,8 +597,31 @@ namespace Doubly_Linked_List
         // Output space: O(max(n, m)) for the result's new nodes.
         public static BinNode<int> AddBig(BinNode<int> list1, BinNode<int> list2)//QF5
         {
-            // TODO
-            return null;
+            BinNode<int> last1 = GetLast(list1);
+            BinNode<int> last2 = GetLast(list2);
+            BinNode<int> result = null;
+            int carry = 0;
+
+            while (last1 != null || last2 != null || carry != 0)
+            {
+                int d1 = 0;
+                if (last1 != null)
+                    d1 = last1.GetValue();
+                int d2 = 0;
+                if (last2 != null)
+                    d2 = last2.GetValue();
+
+                int sum = d1 + d2 + carry;
+                carry = sum / 10;
+                result = AddFirst(result, sum % 10);
+
+                if (last1 != null)
+                    last1 = last1.GetLeft();
+                if (last2 != null)
+                    last2 = last2.GetLeft();
+            }
+
+            return result;
         }
         #endregion PartF
     }

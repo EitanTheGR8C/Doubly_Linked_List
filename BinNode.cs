@@ -17,6 +17,7 @@ namespace Doubly_Linked_List
     // The code using the class must connect neighbouring nodes in both directions.
     public class BinNode<T>
     {
+        #region Part A
         private T value;
         private BinNode<T> left;
         private BinNode<T> right;
@@ -61,5 +62,6 @@ namespace Doubly_Linked_List
         {
             return "" + this.value;
         }
+        #endregion Part A
     }
 }

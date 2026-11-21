@@ -20,7 +20,7 @@
 #define PART_C
 #define PART_D
 #define PART_E
-//#define PART_F
+#define PART_F
 
 using Doubly_Linked_List;
 using System;
